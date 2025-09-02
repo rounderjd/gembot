@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  gembot:
+    build: .
+    container_name: gembot
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - ./workspace:/app/workspace
+      - ./logs:/app/logs
+    env_file:
+      - .env

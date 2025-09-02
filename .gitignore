@@ -1,7 +1,6 @@
 # --- Docker ---
 .dockerignore
 Dockerfile
-docker-compose.yml
 
 # --- Environment ---
 .env
