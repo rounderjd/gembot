@@ -1,0 +1,7 @@
+slack-bolt
+python-dotenv
+psycopg2-binary
+pytz
+flask
+redis
+requests

@@ -1,0 +1,26 @@
+# --- Docker ---
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# --- Environment ---
+.env
+.env.example
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# --- Node.js ---
+node_modules/
+npm-debug.log
+package-lock.json
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Workspace ---
+workspace/

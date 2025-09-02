@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gembot Web UI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #212529;
+        }
+        .btn-custom {
+            padding: 1rem;
+            font-size: 1.1rem;
+        }
+        #output {
+            background-color: #343a40;
+            border-color: #495057;
+            color: #f8f9fa;
+            height: 400px; /* Set a fixed height */
+            max-height: 60vh; /* Or a max-height relative to viewport */
+            overflow-y: auto; /* Make it scrollable */
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <header class="pb-3 mb-4 border-bottom">
+            <a href="/" class="d-flex align-items-center text-white text-decoration-none">
+                <span class="fs-4">Gembot Web UI</span>
+            </a>
+        </header>
+
+        <div class="p-5 mb-4 bg-dark rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">Execution Modes</h1>
+                <p class="col-md-8 fs-4">Select a mode to run the Gemini agent. The output will be streamed below.</p>
+                 <div class="row g-3">
+                    <div class="col-md-3 col-6">
+                        <button class="btn btn-primary w-100 btn-lg btn-custom" onclick="runMode('interactive')">Start Chat</button>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <button class="btn btn-success w-100 btn-lg btn-custom" onclick="runMode('headless')">Headless</button>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <button class="btn btn-info w-100 btn-lg btn-custom" onclick="runMode('context')">Context-Aware</button>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <button class="btn btn-warning w-100 btn-lg btn-custom" onclick="runMode('agentic')">Agentic</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <div class="card text-white bg-dark">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Live Output</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre id="output" class="form-control" rows="15"></pre>
+                    </div>
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <input type="text" id="chatInput" class="form-control" placeholder="Type your message..." disabled>
+                            <button class="btn btn-secondary" id="sendButton" onclick="sendMessage()" disabled>Send</button>
+                        </div>
+                         <div id="status" class="text-muted">Awaiting command...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let eventSource = null;
+
+        function runMode(mode) {
+            const output = document.getElementById('output');
+            const status = document.getElementById('status');
+            const chatInput = document.getElementById('chatInput');
+            const sendButton = document.getElementById('sendButton');
+
+            output.textContent = '';
+            status.textContent = `Running ${mode} mode...`;
+
+            // Close any existing connection
+            if (eventSource) {
+                eventSource.close();
+            }
+
+            eventSource = new EventSource(`/run?mode=${mode}`);
+
+            if (mode === 'interactive') {
+                chatInput.disabled = false;
+                sendButton.disabled = false;
+                status.textContent = 'Chat started. Type your message and press Send.';
+            } else {
+                chatInput.disabled = true;
+                sendButton.disabled = true;
+            }
+
+            eventSource.onmessage = function(event) {
+                output.textContent += event.data + '\n';
+                output.scrollTop = output.scrollHeight;
+            };
+
+            eventSource.onerror = function(event) {
+                status.textContent = 'Connection closed.';
+                chatInput.disabled = true;
+                sendButton.disabled = true;
+                eventSource.close();
+            };
+        }
+
+        function sendMessage() {
+            const chatInput = document.getElementById('chatInput');
+            const message = chatInput.value;
+            if (message.trim() === '') {
+                return;
+            }
+
+            fetch('/send', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message }),
+            });
+
+            chatInput.value = '';
+        }
+    </script>
+</body>
+</html>

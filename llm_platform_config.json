@@ -1,0 +1,25 @@
+{
+    "gemini": {
+        "gemini-cli-aniz-2": "AIzaSyCyQBnNO76ZfScU1Xj1Z0-tV4HOGP1WoKk",
+        "gemini-cli-aniz-10-334746887974": "AIzaSyD3Ovue4x5qm4IwkSLltfLZN1VGZxiRqbQ",
+        "gemini-cli-aniz-4": "AIzaSyCJ1uB1sHmEtcvw9oi238ag-77dQHdJdVA",
+        "gemini-cli-aniz-11-697628982418": "AIzaSyD5_3QVIwmqBow-1uU6iGIgvUEcFXgR4ng",
+        "gemini-cli-aniz-7-652174891869": "AIzaSyDvOr8wLizItfMojogeboSOcFmxGY4i4ws",
+        "gemini-cli-aniz-9-232547135499": "AIzaSyCnvcr_HGA0_rr76fruBXrlYFPO4eAhQo8",
+        "gemini-cli-aniz-8-293551717499": "AIzaSyAd3LMzrLjrWMt8zk6lbwV_o8RKNrJnNPY",
+        "gemini-cli-aniz-3": "AIzaSyCmZ5WIzjdUdbZ0ScT6ofLxD_v6Kbhay7I",
+        "gemini-cli-aniz-6-830656940046": "AIzaSyBLQ_PxlPXEiLj8ot389MlMHY0hYSZsE5o",
+        "gemini-cli-aniz-1": "AIzaSyDOQ38BuYtr1PQp6AJvpXcmzhT39bmfFu0",
+        "gemini-cli-aniz-5": "AIzaSyCrMt3SpAqppGrZlhEAFBryVMUD15MHNhQ"
+    },
+    "openai": {
+        "api_key": "YOUR_OPENAI_API_KEY"
+    },
+    "merlin": {
+        "api_key": "YOUR_MERLIN_API_KEY"
+    },
+    "ollama": {
+        "base_url": "http://localhost:11434/v1",
+        "model": "llama3"
+    }
+}

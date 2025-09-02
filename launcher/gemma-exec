@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# gemma-exec - A wrapper script to execute the Gemini Distributed Agent
+#              with instructions from a file or a direct prompt, prepending
+#              context-aware instructions for the agent.
+#
+
+# --- Configuration & Setup ---
+# Get the absolute path of the directory where this script is located
+PROJECT_ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+PYTHON_EXEC="$PROJECT_ROOT/venv/bin/python"
+AGENT_SCRIPT="$PROJECT_ROOT/gemini_agent.py"
+
+# --- Preamble Definition ---
+# This text is prepended to the user's instructions to guide the agent.
+CONTEXT_PREAMBLE="You are a helpful assistant with access to a long-term memory database. Your task history for today is already loaded as context. Before you respond to the user's request below, please first review your previous interactions from today to understand the full context of the ongoing task.
+
+Here is the user's immediate request:
+---"
+
+# --- Argument Parsing and Instruction Handling ---
+USER_INSTRUCTIONS=""
+INPUT_TYPE="direct prompt"
+
+if [[ "$1" == "--file" ]]; then
+  # File-based input
+  if [[ -z "$2" ]]; then
+    echo "Usage: gemma --file <path_to_instruction_file>"
+    exit 1
+  fi
+  INSTRUCTION_FILE="$2"
+  if [ ! -f "$INSTRUCTION_FILE" ]; then
+    echo "Error: Instruction file not found at '$INSTRUCTION_FILE'"
+    exit 1
+  fi
+  USER_INSTRUCTIONS=$(cat "$INSTRUCTION_FILE")
+  INPUT_TYPE="file: $INSTRUCTION_FILE"
+else
+  # Direct prompt input
+  if [ -z "$1" ]; then
+"    "$PYTHON_EXEC" "$AGENT_SCRIPT" --agentic --permissions superuser"
+    exit 0
+  fi
+  USER_INSTRUCTIONS="$*"
+fi
+
+# --- Instruction Combination ---
+# Combine the preamble and the user's instructions
+FINAL_PROMPT="$CONTEXT_PREAMBLE
+
+$USER_INSTRUCTIONS"
+
+# --- Execution ---
+echo "--- Running Gemini Agent ---"
+echo "Input Type: $INPUT_TYPE"
+echo "----------------------------"
+
+# Execute the agent with the final, combined prompt
+"$PYTHON_EXEC" "$AGENT_SCRIPT" "$FINAL_PROMPT"
+
+echo "----------------------------"
+echo "--- Agent run complete ---"
+
+exit 0
