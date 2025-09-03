@@ -90,19 +90,19 @@ while true; do
 
         case $opt in
             "Interactive Mode: Default, for direct interaction.")
-                "$LAUNCHER" "$TASK_ID" "interactive"
+bash "$LAUNCHER" "$TASK_ID" "interactive"
                 break
                 ;;
             "Headless Mode: For single-shot commands.")
-                "$LAUNCHER" "$TASK_ID" "headless"
+bash "$LAUNCHER" "$TASK_ID" "headless"
                 break
                 ;;
             "Context-Aware Mode: Interactive session with all files in the current directory as context.")
-                "$LAUNCHER" "$TASK_ID" "context"
+bash "$LAUNCHER" "$TASK_ID" "context"
                 break
                 ;;
             "Agentic Mode: Autonomous execution of a prompt.")
-                "$LAUNCHER" "$TASK_ID" "agentic"
+bash "$LAUNCHER" "$TASK_ID" "agentic"
                 break
                 ;;
             "Quit")
